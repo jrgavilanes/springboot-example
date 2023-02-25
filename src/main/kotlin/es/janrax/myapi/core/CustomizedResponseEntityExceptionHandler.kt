@@ -44,9 +44,9 @@ class CustomizedResponseEntityExceptionHandler : ResponseEntityExceptionHandler(
         request: WebRequest,
     ): ResponseEntity<Any>? {
         val errorDetails = ErrorDetails(
-            LocalDateTime.now(),
-            ex.message,
-            request.getDescription(false),
+            timestamp = LocalDateTime.now(),
+            message = "Total errors ${ex.errorCount}: ${ex.fieldError?.defaultMessage}",
+            detail = request.getDescription(false),
         )
         return ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST)
     }
