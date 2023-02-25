@@ -1,10 +1,11 @@
 package es.janrax.myapi.core
 
-import es.janrax.myapi.users.UserNotFoundException
+import es.janrax.myapi.users.exceptions.UserNotFoundException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -40,7 +41,21 @@ class CustomizedResponseEntityExceptionHandler : ResponseEntityExceptionHandler(
         ex: MethodArgumentNotValidException,
         headers: HttpHeaders,
         status: HttpStatusCode,
-        request: WebRequest
+        request: WebRequest,
+    ): ResponseEntity<Any>? {
+        val errorDetails = ErrorDetails(
+            LocalDateTime.now(),
+            ex.message,
+            request.getDescription(false),
+        )
+        return ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST)
+    }
+
+    override fun handleHttpMessageNotReadable(
+        ex: HttpMessageNotReadableException,
+        headers: HttpHeaders,
+        status: HttpStatusCode,
+        request: WebRequest,
     ): ResponseEntity<Any>? {
         val errorDetails = ErrorDetails(
             LocalDateTime.now(),

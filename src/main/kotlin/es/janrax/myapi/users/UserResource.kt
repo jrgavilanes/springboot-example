@@ -1,5 +1,6 @@
 package es.janrax.myapi.users
 
+import es.janrax.myapi.users.exceptions.UserNotFoundException
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
